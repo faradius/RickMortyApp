@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.developerscracks.rickmortyapp.R
 import com.developerscracks.rickmortyapp.databinding.FragmentCharacterListBinding
@@ -19,7 +20,10 @@ class CharacterListFragment : Fragment() {
     private var _binding: FragmentCharacterListBinding? = null
     private val binding get() = _binding!!
 
-    private val charactersAdapter: CharacterListAdapter = CharacterListAdapter {  }
+    private val charactersAdapter: CharacterListAdapter = CharacterListAdapter { idCharacter ->
+        val action = CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment(idCharacter)
+        findNavController().navigate(action)
+    }
 
     private val viewModel by viewModels<CharacterListViewModel>()
 

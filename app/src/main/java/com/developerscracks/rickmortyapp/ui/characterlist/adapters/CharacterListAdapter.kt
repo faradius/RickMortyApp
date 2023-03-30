@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.developerscracks.rickmortyapp.databinding.ItemCharacterBinding
 import com.developerscracks.rickmortyapp.domain.model.Character
 
-class CharacterListAdapter (private val onClick: (String) -> Unit): RecyclerView.Adapter<CharacterListAdapter.CharactersViewHolder>(){
+class CharacterListAdapter (private val onClick: (Int) -> Unit): RecyclerView.Adapter<CharacterListAdapter.CharactersViewHolder>(){
 
     private var characters: List<Character> = mutableListOf()
 
@@ -15,11 +15,15 @@ class CharacterListAdapter (private val onClick: (String) -> Unit): RecyclerView
         private val name = itemBinding.tvNameCharacter
         private val image = itemBinding.ivCharacter
 
-        fun bind(character: Character,onClick: (String) -> Unit ){
+        fun bind(character: Character,onClick: (Int) -> Unit ){
             name.text = character.name
             Glide.with(itemView.context)
                 .load(character.image)
                 .into(image)
+
+            itemView.setOnClickListener {
+                onClick(character.id)
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package com.developerscracks.rickmortyapp.data.model
 
-data class CharacterResponse(
+data class CharacterListDTO(
     val info: Info,
     val results: List<CharacterDTO>
 )

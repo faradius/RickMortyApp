@@ -7,16 +7,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CharacterDataSourceNetworkImpl @Inject constructor(private val api: ApiWebService): CharacterDataSourceNetwork{
+class CharacterDataSourceNetworkImpl @Inject constructor(private val api: ApiWebService) :
+    CharacterDataSourceNetwork {
     override suspend fun getCharacters(): Response<List<CharacterDTO>> {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             try {
-                val characterList = api.getCharacters()
-                Response.Success(characterList.results)
-            }catch (e:Exception){
+                val characterListResult = api.getCharacters()
+                Response.Success(characterListResult.results)
+            } catch (e: Exception) {
                 e.printStackTrace()
                 Response.Error(e)
             }
         }
+    }
+
+    override suspend fun getCharacterById(id: Int): Response<CharacterDTO> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val characterResult = api.getCharacterById(id)
+                Response.Success(characterResult)
+            } catch (e: Exception){
+                e.printStackTrace()
+                Response.Error(e)
+            }
+        }
+
     }
 }

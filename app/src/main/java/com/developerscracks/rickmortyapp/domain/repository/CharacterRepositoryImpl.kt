@@ -12,4 +12,8 @@ class CharacterRepositoryImpl @Inject constructor(
     override suspend fun getCharacters(): Response<List<CharacterDTO>> {
         return networkDataSource.getCharacters()
     }
+
+    override suspend fun getCharacterById(id: Int): Response<CharacterDTO> {
+        return networkDataSource.getCharacterById(id)
+    }
 }
