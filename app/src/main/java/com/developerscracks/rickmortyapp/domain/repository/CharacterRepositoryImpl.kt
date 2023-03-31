@@ -20,6 +20,10 @@ class CharacterRepositoryImpl @Inject constructor(
         return networkDataSource.getCharacterById(id)
     }
 
+    override suspend fun getCharactersByName(name: String): Response<List<CharacterDTO>> {
+        return networkDataSource.getCharactersByName(name)
+    }
+
     override suspend fun insertCharacterToFavorite(character: CharacterEntity) {
         localDataSource.insertCharacterToFavorite(character)
     }

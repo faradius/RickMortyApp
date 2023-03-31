@@ -9,6 +9,8 @@ interface CharacterRepository {
 
     suspend fun getCharacterById(id: Int):Response<CharacterDTO>
 
+    suspend fun getCharactersByName(name: String): Response<List<CharacterDTO>>
+
     suspend fun insertCharacterToFavorite(character: CharacterEntity)
 
     suspend fun getAllCharactersFavorites(): Response<List<CharacterEntity>>

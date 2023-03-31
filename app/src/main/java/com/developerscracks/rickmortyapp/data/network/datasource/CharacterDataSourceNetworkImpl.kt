@@ -33,4 +33,16 @@ class CharacterDataSourceNetworkImpl @Inject constructor(private val api: ApiWeb
         }
 
     }
+
+    override suspend fun getCharactersByName(name: String): Response<List<CharacterDTO>> {
+        return withContext(Dispatchers.IO){
+            try {
+                val characterListResult = api.getCharacterByName(name)
+                Response.Success(characterListResult.results)
+            }catch (e: Exception){
+                e.printStackTrace()
+                Response.Error(e)
+            }
+        }
+    }
 }

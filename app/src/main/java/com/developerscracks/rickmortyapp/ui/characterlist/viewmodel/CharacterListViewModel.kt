@@ -21,9 +21,29 @@ class CharacterListViewModel @Inject constructor(
     private val _characters: MutableLiveData<List<Character>> = MutableLiveData()
     val character: LiveData<List<Character>> = _characters
 
+    init {
+        getCharacters()
+    }
+
     fun getCharacters(){
         viewModelScope.launch {
             val result = repository.getCharacters()
+            when(result){
+                is Response.Success->{
+                    _characters.value = result.data.map {
+                        it.toCharacter()
+                    }
+                }
+                is Response.Error->{
+                    Log.e("ERROR", result.exception?.message ?: "Error desconocido")
+                }
+            }
+        }
+    }
+
+    fun getCharactersByName(name: String){
+        viewModelScope.launch{
+            val result = repository.getCharactersByName(name)
             when(result){
                 is Response.Success->{
                     _characters.value = result.data.map {
