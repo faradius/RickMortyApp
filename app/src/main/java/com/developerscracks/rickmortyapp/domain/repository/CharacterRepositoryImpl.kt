@@ -23,4 +23,8 @@ class CharacterRepositoryImpl @Inject constructor(
     override suspend fun insertCharacterToFavorite(character: CharacterEntity) {
         localDataSource.insertCharacterToFavorite(character)
     }
+
+    override suspend fun getAllCharactersFavorites(): Response<List<CharacterEntity>> {
+        return localDataSource.getAllCharactersFavorites()
+    }
 }

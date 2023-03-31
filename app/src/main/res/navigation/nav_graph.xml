@@ -23,4 +23,13 @@
             android:name="id"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/characterListFavoritesFragment"
+        android:name="com.developerscracks.rickmortyapp.ui.characterfavorites.view.CharacterListFavoritesFragment"
+        android:label="fragment_character_list_favorites"
+        tools:layout="@layout/fragment_character_list_favorites" >
+        <action
+            android:id="@+id/action_characterListFavoritesFragment_to_characterDetailFragment"
+            app:destination="@id/characterDetailFragment" />
+    </fragment>
 </navigation>

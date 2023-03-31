@@ -1,5 +1,6 @@
 package com.developerscracks.rickmortyapp.domain.model
 
+import com.developerscracks.rickmortyapp.data.local.entities.CharacterEntity
 import com.developerscracks.rickmortyapp.data.model.CharacterDTO
 
 data class Character(
@@ -9,6 +10,14 @@ data class Character(
 )
 
 fun CharacterDTO.toCharacter(): Character{
+    return Character(
+        id = this.id,
+        name = this.name,
+        image = this.image
+    )
+}
+
+fun CharacterEntity.toCharacter(): Character{
     return Character(
         id = this.id,
         name = this.name,

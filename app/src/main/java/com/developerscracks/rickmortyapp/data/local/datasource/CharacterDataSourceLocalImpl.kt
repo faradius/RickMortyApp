@@ -10,9 +10,9 @@ class CharacterDataSourceLocalImpl @Inject constructor(private val characterDao:
         characterDao.insertCharacterToFavorite(character)
     }
 
-//    override suspend fun getAllCharactersFavorites(): Response<List<CharacterEntity>> {
-//
-//    }
+    override suspend fun getAllCharactersFavorites(): Response<List<CharacterEntity>> {
+        return Response.Success(characterDao.getAllCharactersFavorites())
+    }
 //
 //    override suspend fun deleteCharacterToFavorite(character: CharacterEntity) {
 //
