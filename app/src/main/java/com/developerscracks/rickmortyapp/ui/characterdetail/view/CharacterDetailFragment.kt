@@ -30,6 +30,7 @@ class CharacterDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        checkbtn()
         subscribeCharacterDetail()
         _binding = FragmentCharacterDetailBinding.inflate(inflater, container, false)
         return binding.root
@@ -38,6 +39,7 @@ class CharacterDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getCharacterDetail(args.id)
+
     }
 
     private fun subscribeCharacterDetail(){
@@ -55,19 +57,40 @@ class CharacterDetailFragment : Fragment() {
             binding.tvCharacterLocationDetail.text = character?.location?.name
 
             binding.fabFavorite.setOnClickListener {
-                viewModel.saveCharacterFavorite(
-                    CharacterEntity(
-                        id = args.id,
-                        image = character?.image!!,
-                        location = character.location.name,
-                        name = character.name,
-                        origin = character.origin.name,
-                        species = character.species,
-                        status = character.status
-                    )
-                )
-                Toast.makeText(requireContext(), "Se ha guardado a favoritos", Toast.LENGTH_SHORT).show()
+
+                viewModel.getCharacterFavoriteById(args.id)
+                viewModel.characterFavorite.observe(viewLifecycleOwner){
+                    if (it?.id == args.id){
+                        viewModel.deleteCharacterFavorite(it.id)
+                        binding.fabFavorite.setImageResource(R.drawable.ic_favorite_border)
+                    }else{
+                        viewModel.saveCharacterFavorite(
+                            CharacterEntity(
+                                id = args.id,
+                                image = character?.image!!,
+                                location = character.location.name,
+                                name = character.name,
+                                origin = character.origin.name,
+                                species = character.species,
+                                status = character.status
+                            )
+                        )
+                        binding.fabFavorite.setImageResource(R.drawable.ic_favorite)
+                    }
+                }
+
+
+
             }
+        }
+    }
+
+    private fun checkbtn(){
+        viewModel.getCharacterFavoriteById(args.id)
+        viewModel.characterFavorite.observe(viewLifecycleOwner){
+            if (it?.id == null) binding.fabFavorite.setImageResource(R.drawable.ic_favorite_border)
+            else binding.fabFavorite.setImageResource(R.drawable.ic_favorite)
+
         }
     }
 

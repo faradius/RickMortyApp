@@ -11,6 +11,9 @@ interface CharacterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacterToFavorite(character: CharacterEntity)
 
-    @Delete
-    suspend fun deleteCharacterToFavorite(character: CharacterEntity)
+    @Query("SELECT * FROM Characters WHERE id = :id")
+    suspend fun getCharacterFavoriteById(id: Int): CharacterEntity
+
+    @Query("DELETE FROM Characters WHERE id = :id")
+    suspend fun deleteCharacterToFavorite(id: Int)
 }
