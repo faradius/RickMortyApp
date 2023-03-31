@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.developerscracks.rickmortyapp.R
+import com.developerscracks.rickmortyapp.data.local.entities.CharacterEntity
 import com.developerscracks.rickmortyapp.databinding.FragmentCharacterDetailBinding
 import com.developerscracks.rickmortyapp.databinding.FragmentCharacterListBinding
 import com.developerscracks.rickmortyapp.ui.characterdetail.viewmodel.CharacterDetailViewModel
@@ -38,7 +40,7 @@ class CharacterDetailFragment : Fragment() {
         viewModel.getCharacterDetail(args.id)
     }
 
-    fun subscribeCharacterDetail(){
+    private fun subscribeCharacterDetail(){
         viewModel.characterDetail.observe(viewLifecycleOwner){character ->
             binding.tvNameCharacterDetail.text = character?.name
 
@@ -52,6 +54,20 @@ class CharacterDetailFragment : Fragment() {
             binding.tvCharacterOriginDetail.text = character?.origin?.name
             binding.tvCharacterLocationDetail.text = character?.location?.name
 
+            binding.fabFavorite.setOnClickListener {
+                viewModel.saveCharacterFavorite(
+                    CharacterEntity(
+                        id = args.id,
+                        image = character?.image!!,
+                        location = character.location.name,
+                        name = character.name,
+                        origin = character.origin.name,
+                        species = character.species,
+                        status = character.status
+                    )
+                )
+                Toast.makeText(requireContext(), "Se ha guardado a favoritos", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

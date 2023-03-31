@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.developerscracks.rickmortyapp.core.Response
+import com.developerscracks.rickmortyapp.data.local.entities.CharacterEntity
 import com.developerscracks.rickmortyapp.data.model.CharacterDTO
 import com.developerscracks.rickmortyapp.domain.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,6 +34,12 @@ class CharacterDetailViewModel @Inject constructor(
                     Log.e("ERROR", result.exception?.message ?: "Error desconocido")
                 }
             }
+        }
+    }
+
+    fun saveCharacterFavorite(character: CharacterEntity){
+        viewModelScope.launch {
+            repository.insertCharacterToFavorite(character)
         }
     }
 }
