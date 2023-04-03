@@ -17,4 +17,11 @@ interface ApiWebService {
 
     @GET("character/")
     suspend fun getCharacterByName(@Query("name") name:String): CharacterListDTO
+
+
+    @GET("character/")
+    suspend fun getCharactersPage(
+        @Query("page") page: Int,
+        @Query("count") size: Int
+    ): CharacterListDTO
 }

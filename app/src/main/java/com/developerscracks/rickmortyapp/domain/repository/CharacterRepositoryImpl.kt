@@ -1,16 +1,23 @@
 package com.developerscracks.rickmortyapp.domain.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.developerscracks.rickmortyapp.core.Response
 import com.developerscracks.rickmortyapp.data.local.datasource.CharacterDataSourceLocal
 import com.developerscracks.rickmortyapp.data.local.entities.CharacterEntity
 import com.developerscracks.rickmortyapp.data.model.CharacterDTO
+import com.developerscracks.rickmortyapp.data.network.api.ApiWebService
 import com.developerscracks.rickmortyapp.data.network.datasource.CharacterDataSourceNetwork
+import com.developerscracks.rickmortyapp.data.network.datasource.CharacterDataSourceNetworkImpl
+import kotlinx.coroutines.flow.Flow
 
 import javax.inject.Inject
 
 class CharacterRepositoryImpl @Inject constructor(
     private val networkDataSource: CharacterDataSourceNetwork,
-    private val localDataSource: CharacterDataSourceLocal
+    private val localDataSource: CharacterDataSourceLocal,
+    private val api : ApiWebService
 ): CharacterRepository {
     override suspend fun getCharacters(): Response<List<CharacterDTO>> {
         return networkDataSource.getCharacters()
@@ -40,4 +47,15 @@ class CharacterRepositoryImpl @Inject constructor(
     override suspend fun getAllCharactersFavorites(): Response<List<CharacterEntity>> {
         return localDataSource.getAllCharactersFavorites()
     }
+
+    override fun getCharactersPage(): Flow<PagingData<CharacterDTO>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 42,
+                initialLoadSize = 20,
+                enablePlaceholders = false,
+                prefetchDistance = 5
+            ),
+            pagingSourceFactory = { CharacterDataSourceNetworkImpl(api) }
+        ).flow
 }

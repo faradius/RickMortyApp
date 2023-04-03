@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.developerscracks.rickmortyapp.R
 import com.developerscracks.rickmortyapp.databinding.FragmentCharacterListBinding
+import com.developerscracks.rickmortyapp.ui.characterlist.adapters.CharacterAdapter
 import com.developerscracks.rickmortyapp.ui.characterlist.adapters.CharacterListAdapter
 import com.developerscracks.rickmortyapp.ui.characterlist.viewmodel.CharacterListViewModel
 import com.developerscracks.rickmortyapp.utils.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CharacterListFragment : Fragment() {
@@ -22,10 +26,12 @@ class CharacterListFragment : Fragment() {
     private var _binding: FragmentCharacterListBinding? = null
     private val binding get() = _binding!!
 
-    private val charactersAdapter: CharacterListAdapter = CharacterListAdapter { idCharacter ->
-        val action = CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment(idCharacter)
-        findNavController().navigate(action)
-    }
+//    private val charactersAdapter: CharacterListAdapter = CharacterListAdapter { idCharacter ->
+//        val action = CharacterListFragmentDirections.actionCharacterListFragmentToCharacterDetailFragment(idCharacter)
+//        findNavController().navigate(action)
+//    }
+
+    val characterAdapter = CharacterAdapter()
 
     private val viewModel by viewModels<CharacterListViewModel>()
 
@@ -68,13 +74,19 @@ class CharacterListFragment : Fragment() {
 
         binding.rvListCharacters.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = charactersAdapter
+            adapter = characterAdapter
         }
     }
 
     private fun subscribeCharacters(){
-        viewModel.character.observe(viewLifecycleOwner){
-            charactersAdapter.submit(it)
+//        viewModel.character.observe(viewLifecycleOwner){
+//            charactersAdapter.submit(it)
+//        }
+
+        lifecycleScope.launch {
+            viewModel.characters.collect{
+                characterAdapter.submitData(it)
+            }
         }
     }
 
